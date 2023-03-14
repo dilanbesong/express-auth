@@ -5,6 +5,10 @@ confirmcodeButton.addEventListener('click', async (e) => {
     e.preventDefault() 
     const code = document.querySelector('#codeInput').value
     const email = document.querySelector('#email').value 
+    if(!email.includes('@') && !email.includes('.com')){
+        serverResponse.innerHTML = 'Invalid email type'
+        return
+    }
     const { data:{ msg } } = await axios.post('/sendcode', { code, email }) 
     if(msg === 'edit-password-route'){
         location.href = '/editpassword'
