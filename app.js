@@ -160,7 +160,7 @@ app.post('/editpassword', async (req, res) => {
   }
 })
 
-app.all('*', (req, res) => {
+app.get('*', (req, res) => {
    return res.sendFile(_path + '/invalid.html')
 })
 
