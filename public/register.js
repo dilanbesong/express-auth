@@ -11,15 +11,15 @@ registerButton.addEventListener('click', async (e) =>{
     const username = qs('#username').value
     const email = qs('#email').value
     const password = qs('#password').value 
-    if( username === ''){
+    if( qs('#username').value === ''){
       serverResponse.innerHTML = 'username must not not be empty'
       return
     }
-    if( password.length < 5){
+    if( qs('#email').value.length < 5){
        serverResponse.innerHTML = 'password must be greater than 5 characters'
       return
     }
-    if(!email.includes('@') && !email.includes('.com')){
+    if(!qs('#email').value.includes('@') && !qs('#email').value.includes('.com')){
        serverResponse.innerHTML = 'invalid email type'
        return
     }
