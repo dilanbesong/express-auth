@@ -95,7 +95,7 @@ app.get('/user', async(req, res) => {
    }
 })
 
-app.get('/forgotten-password',  (req, res) => {
+app.get('/forgotten-password', checkNotAuthenticated,  (req, res) => {
    return res.sendFile(_path + '/sendVerification.html')
 })
 
@@ -117,7 +117,7 @@ app.post('/sendmail',  async (req, res) => {
    }
 })
 
-app.get('/sendcode', (req, res) => {
+app.get('/sendcode',checkNotAuthenticated, (req, res) => {
    return res.sendFile(_path + '/entercode.html')
 })
 
@@ -158,6 +158,10 @@ app.post('/editpassword', async (req, res) => {
   } catch (error) {
     return res.send({msg:'error'})
   }
+})
+
+app.all('*', (req, res) => {
+   return res.sendFile(_path + '/invalid.html')
 })
 
 app.listen(port, () => console.log(`Server is running on port ${port}...`))
