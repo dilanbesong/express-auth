@@ -26,7 +26,7 @@ updatePasswordButton.addEventListener('click', async (e) => {
       const password1 = qs('#password1').value 
       const password2 = qs('#password2').value 
       const { data:{ msg, token } } = await axios.post('/editpassword', { password1, password2 })
-      if( msg === 'home' && token){
+      if( msg === 'home'){
           sessionStorage.setItem('token', token)
           location.href = '/home' 
           return 

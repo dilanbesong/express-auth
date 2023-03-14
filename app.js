@@ -45,7 +45,6 @@ app.get('/logout', (req, res) => {
 })
 
 app.get('/register', checkNotAuthenticated,  (req, res) =>{
-
   return res.sendFile(_path + '/signUp.html')               
 })
 
@@ -67,22 +66,25 @@ app.get('/login', checkNotAuthenticated,  (req, res) =>{
 
 app.post('/login', async (req, res) => {
   const { email, password } = req.body
-  const user = await User.findOne({email})
-  if( user == null){
-    return res.send({msg:'Invalid user'})
-  }
-  if( user.password === password){
-    // user will stay logged in for 1year
-    req.session.cookie.maxAge = 365 * 24 * 60 * 60 * 1000
-    req.session.user = user
-    req.session.isloggedIn = true
-
-    // This user should log in again after restarting the browser
-    req.session.cookie.expires = false
-    const token = jwt.sign({user}, process.env.JWT_SECRETE, {expiresIn:'1hr'})
-    sendEmail(user.email, `<b>Welcome to Dilan ventures Mr/Mrs ${user.username}.</b>`)
-    return res.send({msg:'home', token})
-  }
+   try {
+          const user = await User.findOne({email})
+         if( user == null){
+              return res.send({msg:'Invalid user'})
+          }
+         if( user.password === password){
+        // user will stay logged in for 1year
+               req.session.cookie.maxAge = 365 * 24 * 60 * 60 * 1000
+               req.session.user = user
+               req.session.isloggedIn = true
+        // This user should log in again after restarting the browser
+               req.session.cookie.expires = false
+               const token = jwt.sign({user}, process.env.JWT_SECRETE, {expiresIn:'1hr'})
+              sendEmail(user.email, `<b>Welcome to Dilan ventures Mr/Mrs ${user.username}.</b>`)
+             return res.send({msg:'home', token})
+}
+   } catch (error) {
+     return res.send(error.mess)
+   } 
 })
 app.get('/user', async(req, res) => {
    try {
@@ -147,17 +149,12 @@ app.post('/editpassword', async (req, res) => {
   const { password1, password2 } = req.body
   try {
      if( password1 === password2){
-       const updateUser = await User.findOneAndUpdate({email:req.session.user.email}, 
-        { password:password1})
-       if( updateUser !== null){
-             req.session.isloggedIn = true
-             const token = jwt.sign({user:updateUser}, process.env.JWT_SECRETE, {expiresIn:'1hr'})
-             return res.status(200).send({ msg:'home', token })
-       }else{
-             return res.status(200).send({msg:'we could not update your passsword'})
-       }
- }
- return res.status(200).send({msg:'Both fields values must be equal'})
+          await User.findOneAndUpdate({email:req.session.user.email},{ password:password1}) 
+          req.session.isloggedIn = true
+          const token = jwt.sign({user:updateUser}, process.env.JWT_SECRETE, {expiresIn:'1hr'})
+          return res.status(200).send({ msg:'home', token })
+      }
+    return res.status(200).send({msg:'Both fields values must be equal'})
   } catch (error) {
     return res.send({msg:'error'})
   }
