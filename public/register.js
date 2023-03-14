@@ -12,22 +12,22 @@ registerButton.addEventListener('click', async (e) =>{
     const email = qs('#email').value
     const password = qs('#password').value 
     if( qs('#username').value === ''){
-      serverResponse.innerHTML = 'username must not not be empty'
+      serverResponse.innerHTML = 'Username must not not be empty'
       return
     }
     if( qs('#email').value.length < 5){
-       serverResponse.innerHTML = 'password must be greater than 5 characters'
+       serverResponse.innerHTML = 'Password must be greater than 5 characters'
       return
     }
     if(!qs('#email').value.includes('@') && !qs('#email').value.includes('.com')){
-       serverResponse.innerHTML = 'invalid email type'
+       serverResponse.innerHTML = 'Invalid email type'
        return
     }
     const dataResponse = await axios.post('/register', { username, email, password } )  
     const { msg, token } = dataResponse.data
   
    if(msg === 'user exist'){
-       serverResponse.innerHTML = 'user exist'
+       serverResponse.innerHTML = 'User exist'
        return
     }
     if( msg === 'home' && token){

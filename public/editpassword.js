@@ -26,7 +26,7 @@ updatePasswordButton.addEventListener('click', async (e) => {
       const password1 = qs('#password1').value 
       const password2 = qs('#password2').value 
       if( qs('#password1').value .length < 5 && qs('#password2').value .length < 5){
-        responseText.innerHTML = 'password must be greater than 5'
+        responseText.innerHTML = 'Password must be greater than 5'
       }
       const { data:{ msg, token } } = await axios.post('/editpassword', { password1, password2 })
       if( msg === 'home'){
